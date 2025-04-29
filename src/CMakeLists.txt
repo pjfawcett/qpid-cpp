@@ -688,6 +688,14 @@ else (CMAKE_SYSTEM_NAME STREQUAL Windows)
     set (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lmalloc")
   endif (CMAKE_CXX_COMPILER_ID STREQUAL SunPro)
 
+  MACRO (install_common_so libname)
+    install (TARGETS ${libname}
+      RUNTIME DESTINATION ${QPID_INSTALL_BINDIR} COMPONENT ${QPID_COMPONENT_DEVELOPMENT}
+      LIBRARY DESTINATION ${QPID_INSTALL_LIBDIR} COMPONENT ${QPID_COMPONENT_COMMON} NAMELINK_COMPONENT ${QPID_COMPONENT_DEVELOPMENT}
+      ARCHIVE DESTINATION ${QPID_INSTALL_LIBDIR} COMPONENT ${QPID_COMPONENT_DEVELOPMENT})
+  ENDMACRO ()
+
+
   set (qpidcommon_platform_SOURCES
     qpid/sys/posix/AsynchIO.cpp
     qpid/sys/posix/Condition.cpp
@@ -854,10 +862,7 @@ set_target_properties (qpidcommon PROPERTIES
                        VERSION ${qpidcommon_version}
                        SOVERSION ${qpidcommon_version_major})
 
-install (TARGETS qpidcommon
-         RUNTIME DESTINATION ${QPID_INSTALL_BINDIR} COMPONENT ${QPID_COMPONENT_COMMON}
-         LIBRARY DESTINATION ${QPID_INSTALL_LIBDIR} COMPONENT ${QPID_COMPONENT_COMMON}
-         ARCHIVE DESTINATION ${QPID_INSTALL_LIBDIR} COMPONENT ${QPID_COMPONENT_COMMON})
+install_common_so (qpidcommon)
 install_pdb (qpidcommon ${QPID_COMPONENT_COMMON})
 
 set(qpidtypes_SOURCES
@@ -879,10 +884,7 @@ set_target_properties (qpidtypes PROPERTIES
                        VERSION ${qpidtypes_version}
                        SOVERSION ${qpidtypes_version_major})
 
-install(TARGETS qpidtypes
-        RUNTIME DESTINATION ${QPID_INSTALL_BINDIR} COMPONENT ${QPID_COMPONENT_COMMON}
-        LIBRARY DESTINATION ${QPID_INSTALL_LIBDIR} COMPONENT ${QPID_COMPONENT_COMMON}
-        ARCHIVE DESTINATION ${QPID_INSTALL_LIBDIR} COMPONENT ${QPID_COMPONENT_COMMON})
+install_common_so (qpidtypes)
 install_pdb (qpidtypes ${QPID_COMPONENT_COMMON})
 
 add_api_test(qpidtypes)
@@ -938,10 +940,7 @@ set_target_properties (qpidclient PROPERTIES
                        VERSION ${qpidclient_version}
                        SOVERSION ${qpidclient_version_major})
 
-install (TARGETS qpidclient
-         RUNTIME DESTINATION ${QPID_INSTALL_BINDIR} COMPONENT ${QPID_COMPONENT_CLIENT}
-         LIBRARY DESTINATION ${QPID_INSTALL_LIBDIR} COMPONENT ${QPID_COMPONENT_CLIENT}
-         ARCHIVE DESTINATION ${QPID_INSTALL_LIBDIR} COMPONENT ${QPID_COMPONENT_CLIENT})
+install_common_so (qpidclient)
 install (DIRECTORY ../include/qpid
          DESTINATION ${QPID_INSTALL_INCLUDEDIR}
          COMPONENT ${QPID_COMPONENT_CLIENT_INCLUDE}
@@ -1005,10 +1004,7 @@ set_target_properties (qpidmessaging PROPERTIES
                        COMPILE_FLAGS "${HIDE_SYMBOL_FLAGS}"
                        VERSION ${qpidmessaging_version}
                        SOVERSION ${qpidmessaging_version_major})
-install (TARGETS qpidmessaging
-         RUNTIME DESTINATION ${QPID_INSTALL_BINDIR} COMPONENT ${QPID_COMPONENT_CLIENT}
-         LIBRARY DESTINATION ${QPID_INSTALL_LIBDIR} COMPONENT ${QPID_COMPONENT_CLIENT}
-         ARCHIVE DESTINATION ${QPID_INSTALL_LIBDIR} COMPONENT ${QPID_COMPONENT_CLIENT})
+install_common_so (qpidmessaging)
 install_pdb (qpidmessaging ${QPID_COMPONENT_CLIENT})
 
 add_api_test(qpidmessaging)
@@ -1151,9 +1147,9 @@ if (MSVC)
   set_target_properties (qpidbroker PROPERTIES COMPILE_FLAGS /wd4290)
 endif (MSVC)
 install (TARGETS qpidbroker
-         RUNTIME DESTINATION ${QPID_INSTALL_BINDIR} COMPONENT ${QPID_COMPONENT_BROKER}
-         LIBRARY DESTINATION ${QPID_INSTALL_LIBDIR} COMPONENT ${QPID_COMPONENT_BROKER}
-         ARCHIVE DESTINATION ${QPID_INSTALL_LIBDIR} COMPONENT ${QPID_COMPONENT_BROKER})
+          RUNTIME DESTINATION ${QPID_INSTALL_BINDIR} COMPONENT ${QPID_COMPONENT_DEVELOPMENT}
+          LIBRARY DESTINATION ${QPID_INSTALL_LIBDIR} COMPONENT ${QPID_COMPONENT_BROKER} NAMELINK_COMPONENT ${QPID_COMPONENT_DEVELOPMENT}
+          ARCHIVE DESTINATION ${QPID_INSTALL_LIBDIR} COMPONENT ${QPID_COMPONENT_DEVELOPMENT})
 install_pdb (qpidbroker ${QPID_COMPONENT_BROKER})
 
 
@@ -1317,5 +1313,5 @@ install (FILES
          ${CMAKE_CURRENT_BINARY_DIR}/QpidConfig.cmake
          ${CMAKE_CURRENT_BINARY_DIR}/QpidConfigVersion.cmake
          DESTINATION ${QPID_INSTALL_LIBDIR}/cmake/Qpid
-         COMPONENT ${QPID_COMPONENT_COMMON})
+         COMPONENT ${QPID_COMPONENT_DEVELOPMENT})
 

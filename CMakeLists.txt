@@ -16,15 +16,10 @@
 # specific language governing permissions and limitations
 # under the License.
 #
+cmake_minimum_required(VERSION 3.1.3 FATAL_ERROR)
+cmake_policy(SET CMP0115 OLD)
 
 project(qpid-cpp)
-
-if (NOT MSVC)
-  cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
-else (NOT MSVC)
-  # windows PDB file installation needs v3.1
-  cmake_minimum_required(VERSION 3.1.3 FATAL_ERROR)
-endif (NOT MSVC)
 
 if (CMAKE_CONFIGURATION_TYPES)
   # There is no single "build type"...
@@ -99,24 +94,30 @@ endif (WIN32)
 set_absolute_install_path (QPIDC_CONF_FILE ${QPID_INSTALL_CONFDIR}/qpidc.conf)
 set_absolute_install_path (QPIDD_CONF_FILE ${QPID_INSTALL_CONFDIR}/qpidd.conf)
 
-install(FILES  LICENSE.txt NOTICE.txt DESTINATION ${QPID_INSTALL_DOCDIR})
+install(FILES  LICENSE.txt NOTICE.txt DESTINATION ${QPID_INSTALL_DOCDIR} COMPONENT ${QPID_COMPONENT_COMMON})
 install(FILES  include/qmf/qmf2.i
-        DESTINATION ${QPID_INSTALL_INCLUDEDIR}/qmf)
+        DESTINATION ${QPID_INSTALL_INCLUDEDIR}/qmf
+        COMPONENT ${QPID_COMPONENT_QMF})
 
 if (WIN32)
   set (CMAKE_DEBUG_POSTFIX "d")
 endif (WIN32)
 
-# set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CPACK_SET_DESTDIR ON)
-set(CPACK_PACKAGE_NAME "qpid-cpp")
 set(CPACK_PACKAGE_VENDOR "Apache Software Foundation")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Apache Qpid C++")
 set(CPACK_PACKAGE_VERSION "${qpidc_version}")
 set(CPACK_PACKAGE_VERSION_MAJOR "${QPID_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${QPID_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "0")
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "qpidc-${qpidc_version}")
+
+set(CPACK_GENERATOR                    "RPM")
+set(CPACK_PACKAGE_NAME                 "${CMAKE_PROJECT_NAME}")
+set(CPACK_PACKAGING_INSTALL_PREFIX     "/usr")
+set(CPACK_PACKAGE_RELOCATABLE          ON)
+set(CPACK_RPM_COMPONENT_INSTALL        ON)
+
+set(CPACK_RPM_PACKAGE_RELEASE_DIST "el9")
+set(CPACK_RPM_FILE_NAME "RPM-DEFAULT")
 
 # Add custom target for docs since we don't include a cmake file there directly.
 add_custom_target(docs)
@@ -234,13 +235,13 @@ if (MSVC)
 endif (MSVC)
 
 # Subdirectories
-add_subdirectory(management/python)
-add_subdirectory(managementgen)
+# add_subdirectory(management/python)
+# add_subdirectory(managementgen)
 add_subdirectory(src)
 add_subdirectory(etc)
-add_subdirectory(bindings)
-add_subdirectory(docs/api)
-add_subdirectory(docs/man)
-add_subdirectory(examples)
+# add_subdirectory(bindings)
+# add_subdirectory(docs/api)
+# add_subdirectory(docs/man)
+# add_subdirectory(examples)
 
 include (CPack)

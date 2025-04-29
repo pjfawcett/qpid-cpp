@@ -62,7 +62,7 @@ target_link_libraries(qpid-receive qpidmessaging qpidtypes qpidcommon)
 add_executable(qpid-send qpid-send.cpp Statistics.cpp ${platform_test_additions})
 target_link_libraries(qpid-send qpidmessaging qpidtypes qpidcommon)
 
-install(TARGETS qpid-receive qpid-send RUNTIME DESTINATION ${QPID_INSTALL_BINDIR})
+install(TARGETS qpid-receive qpid-send RUNTIME DESTINATION ${QPID_INSTALL_BINDIR} COMPONENT ${QPID_COMPONENT_DEVELOPMENT})
 
 add_executable(qpid-perftest qpid-perftest.cpp ${platform_test_additions})
 target_link_libraries(qpid-perftest qpidclient qpidcommon ${Boost_PROGRAM_OPTIONS_LIBRARY})
@@ -100,7 +100,8 @@ install(TARGETS
         qpid-ping
         qpid-topic-listener qpid-topic-publisher receiver sender
         qpid-txtest qpid-txtest2
-        RUNTIME DESTINATION ${QPID_INSTALL_TESTDIR})
+        RUNTIME DESTINATION ${QPID_INSTALL_TESTDIR}
+        COMPONENT ${QPID_COMPONENT_DEVELOPMENT})
 
 # Only build test code if testing is turned on
 if (BUILD_TESTING)
