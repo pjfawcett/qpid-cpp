@@ -48,7 +48,7 @@ boost::equality_comparable<
     SequenceNumber& operator++() { ++value; return *this; }
     SequenceNumber& operator--() { --value; return *this; }
     bool operator==(const SequenceNumber& other) const { return value == other.value; }
-    bool operator<(const SequenceNumber& other) const { return (value - other.value) < 0; }
+    bool operator<(const SequenceNumber& other) const { return (int32_t(getValue() - other.getValue())) < 0; }
     uint32_t getValue() const { return uint32_t(value); }
     operator uint32_t() const { return uint32_t(value); }
 

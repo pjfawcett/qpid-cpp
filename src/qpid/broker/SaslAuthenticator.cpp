@@ -125,7 +125,7 @@ typedef int (*sasl_callback_ft)(void);
 // passed to sasl_server_init()
 static sasl_callback_t _callbacks[] =
 {
-        {   SASL_CB_VERIFYFILE, (sasl_callback_ft)&_sasl_verifyfile_callback, NULL },
+        {   SASL_CB_VERIFYFILE, (sasl_callback_ft)((int(*)(...))(_sasl_verifyfile_callback)), NULL },
     {   SASL_CB_LIST_END,   NULL,                                         NULL }
 };
 sasl_callback_t *callbacks = _callbacks;

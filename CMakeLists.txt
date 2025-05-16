@@ -46,7 +46,7 @@ string(REPLACE "-" ";" QPID_VERSION_SPLIT "${QPID_VERSION_LINE}")
 list(GET QPID_VERSION_SPLIT 0 QPID_VERSION_CLEAN)
 list(REMOVE_AT QPID_VERSION_SPLIT 0)
 string(REPLACE ";" "-" QPID_VERSION_QUALIFIER "${QPID_VERSION_SPLIT}")
-string(REGEX MATCHALL "[0-9]+" QPID_VERSION_LIST "${QPID_VERSION_CLEAN}")
+string(REGEX MATCHALL "[0-9a-z]+" QPID_VERSION_LIST "${QPID_VERSION_CLEAN}")
 
 list(GET QPID_VERSION_LIST 0 QPID_VERSION_MAJOR)
 list(GET QPID_VERSION_LIST 1 QPID_VERSION_MINOR)
@@ -74,6 +74,7 @@ endif (MSVC)
 
 # QPID-8605: silence the global placeholders deprecation warning from boost
 add_compile_definitions(BOOST_BIND_GLOBAL_PLACEHOLDERS)
+add_compile_definitions(BOOST_ALLOW_DEPRECATED_HEADERS)
 
 # Overall packaging/install options.
 # This section also has all the setup for various packaging-specific options.
@@ -113,7 +114,7 @@ set(CPACK_PACKAGE_VERSION_PATCH "0")
 set(CPACK_GENERATOR                    "RPM")
 set(CPACK_PACKAGE_NAME                 "${CMAKE_PROJECT_NAME}")
 set(CPACK_PACKAGING_INSTALL_PREFIX     "/usr")
-set(CPACK_PACKAGE_RELOCATABLE          ON)
+set(CPACK_PACKAGE_RELOCATABLE          OFF)
 set(CPACK_RPM_COMPONENT_INSTALL        ON)
 
 set(CPACK_RPM_PACKAGE_RELEASE_DIST "el9")
@@ -235,11 +236,11 @@ if (MSVC)
 endif (MSVC)
 
 # Subdirectories
-# add_subdirectory(management/python)
+add_subdirectory(management/python)
 # add_subdirectory(managementgen)
 add_subdirectory(src)
 add_subdirectory(etc)
-# add_subdirectory(bindings)
+add_subdirectory(bindings)
 # add_subdirectory(docs/api)
 # add_subdirectory(docs/man)
 # add_subdirectory(examples)

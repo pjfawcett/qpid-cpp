@@ -144,7 +144,7 @@ class CyrusSasl : public Sasl
 //sasl callback functions
 int getUserFromSettings(void *context, int id, const char **result, unsigned *len);
 int getPasswordFromSettings(sasl_conn_t *conn, void *context, int id, sasl_secret_t **psecret);
-typedef int CallbackProc();
+typedef int CallbackProc(...);
 
 qpid::sys::Mutex SaslFactory::lock;
 std::auto_ptr<SaslFactory> SaslFactory::instance;
@@ -212,7 +212,7 @@ CyrusSasl::CyrusSasl(const std::string & username, const std::string & password,
 
     if (!settings.username.empty()) {
         callbacks[i].id = SASL_CB_AUTHNAME;
-        callbacks[i].proc = (CallbackProc*) &getUserFromSettings;
+        callbacks[i].proc = (int (*)(void))((CallbackProc*)(getUserFromSettings));
         callbacks[i++].context = &settings;
 
         callbacks[i].id = SASL_CB_PASS;
@@ -220,7 +220,7 @@ CyrusSasl::CyrusSasl(const std::string & username, const std::string & password,
             callbacks[i].proc = 0;
             callbacks[i++].context = 0;        
         } else {
-            callbacks[i].proc = (CallbackProc*) &getPasswordFromSettings;
+            callbacks[i].proc = (int (*)(void))((CallbackProc*)(getPasswordFromSettings));
             callbacks[i++].context = &settings;
         }
     }
