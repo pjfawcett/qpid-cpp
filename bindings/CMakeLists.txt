@@ -109,7 +109,7 @@ if (SWIG_FOUND)
   endif (PYTHONLIBS_FOUND)
 
   if (RUBY_FOUND)
-    option(BUILD_BINDING_RUBY "Build Ruby bindings" ON)
+    option(BUILD_BINDING_RUBY "Build Ruby bindings" OFF)
   endif (RUBY_FOUND)
 
   if (PERLLIBS_FOUND)

@@ -243,6 +243,6 @@ add_subdirectory(etc)
 add_subdirectory(bindings)
 # add_subdirectory(docs/api)
 # add_subdirectory(docs/man)
-# add_subdirectory(examples)
+add_subdirectory(examples)
 
 include (CPack)
