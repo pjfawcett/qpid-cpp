@@ -514,7 +514,7 @@ set (acl_SOURCES
      qpid/acl/AclValidator.h
     )
 
-set (ha_default ON)
+set (ha_default OFF)
 
 option(BUILD_HA "Build Active-Passive HA plugin" ${ha_default})
 

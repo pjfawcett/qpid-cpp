@@ -236,7 +236,7 @@ if (MSVC)
 endif (MSVC)
 
 # Subdirectories
-add_subdirectory(management/python)
+# add_subdirectory(management/python)
 # add_subdirectory(managementgen)
 add_subdirectory(src)
 add_subdirectory(etc)
