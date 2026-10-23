@@ -8,12 +8,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-20.04 ]
+        os: [ ubuntu-latest ]
         # https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json
         python-version: ["3.8" ]
         buildType: [ RelWithDebInfo ]
         include:
-          - os: ubuntu-20.04
+          - os: ubuntu-latest
             # QPID-8606: we don't support swig 4.0, it produces runtime errors when used
             cmake_extra: '-DSWIG_EXECUTABLE="/usr/bin/swig3.0" -DRUBY_EXECUTABLE="/usr/bin/ruby2.6"'
     env:
@@ -37,21 +37,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
-
-      - name: Set up Python ${{ matrix.python-version }}
-        if: matrix.python-version == '2.7' && matrix.os == 'ubuntu-20.04'
-        run: |
-          sudo apt install -y python2
-          curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
-          sudo python2 get-pip.py
-        id: apt-install-python
-
-      - name: Set up Python ${{ matrix.python-version }}
-        if: matrix.python-version == '2.7' && matrix.os == 'windows-latest'
-        run: |
-          choco install python2
-        id: choco-install-python
-        shell: pwsh
 
       - name: Configure steps.python.outputs
         run: |
